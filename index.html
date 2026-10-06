@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlowBeauty - viviana navarrete</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f472b6',
+                            400: '#e879f9',
+                            500: '#db2777',
+                            600: '#be185d',
+                            700: '#9d174d',
+                            dark: '#1e1b1e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #faf5f8;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f472b6;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 flex h-screen overflow-hidden">
+
+  
+    <aside class="w-64 bg-white border-r border-pink-100 flex flex-col justify-between hidden md:flex shrink-0 z-20">
+        <div>
+        
+            <div class="p-6 flex items-center gap-3 border-b border-pink-50">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-scissors text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-gray-800 text-lg leading-tight">vivipink</h1>
+                    <p class="text-xs text-pink-500 font-medium">Gestión para Estilista</p>
+                </div>
+            </div>
+
+        
+            <nav class="p-4 space-y-1.5" id="mainNav">
+                <button onclick="switchView('dashboard')" data-view="dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-pink-50 text-brand-600 font-semibold transition-all">
+                    <i class="fa-solid fa-chart-pie w-5 text-center text-lg"></i>
+                    <span>Inicio</span>
+                </button>
+                <button onclick="switchView('agenda')" data-view="agenda" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50/50 hover:text-brand-600 font-medium transition-all">
+                    <i class="fa-regular fa-calendar-check w-5 text-center text-lg"></i>
+                    <span>Agenda (8am-12pm)</span>
+                </button>
+                <button onclick="switchView('clientas')" data-view="clientas" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50/50 hover:text-brand-600 font-medium transition-all">
+                    <i class="fa-solid fa-users w-5 text-center text-lg"></i>
+                    <span>Gestión Clientas</span>
+                </button>
+                <button onclick="switchView('servicios')" data-view="servicios" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50/50 hover:text-brand-600 font-medium transition-all">
+                    <i class="fa-solid fa-spa w-5 text-center text-lg"></i>
+                    <span>Catálogo Servicios</span>
+                </button>
+                <button onclick="switchView('reportes')" data-view="reportes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50/50 hover:text-brand-600 font-medium transition-all">
+                    <i class="fa-solid fa-chart-line w-5 text-center text-lg"></i>
+                    <span>Estadísticas</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-pink-50">
+            <div class="flex items-center gap-3 p-2 bg-pink-50/50 rounded-xl">
+                <div class="w-10 h-10 rounded-full bg-brand-200 text-brand-700 font-bold flex items-center justify-center border-2 border-brand-300">
+                    VN
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-semibold text-gray-800 truncate">Viviana Navarrete</p>
+                    <p class="text-xs text-gray-500 truncate">Estilista</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+
+        <header class="bg-white border-b border-pink-100 py-4 px-6 md:px-8 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-gray-600 text-xl focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800" id="viewTitle">Página Principal</h2>
+                    <p class="text-xs text-gray-500" id="currentDateText">"Hoy será un día maravilloso.."</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="openModalCita()" class="bg-gradient-to-r from-brand-500 to-rose-400 hover:from-brand-600 hover:to-rose-500 text-white px-4 py-2.5 rounded-xl font-medium shadow-md shadow-pink-200 hover:shadow-lg transition-all flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span class="hidden sm:inline">Agenda tu Cita</span>
+                </button>
+            </div>
+        </header>
+
+
+        <div class="p-4 md:p-8 space-y-6 max-w-7xl mx-auto w-full flex-1">
+
+  
+            <div id="toastNotification" class="hidden p-4 mb-4 text-sm rounded-xl transition-all shadow-md flex items-center justify-between">
+                <span id="toastText"></span>
+                <button onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <section id="view-dashboard" class="view-section space-y-6">
+        
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100/80 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Citas de Hoy</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="dashKpiCitas">0 / 4</h3>
+                            <p class="text-xs text-emerald-600 mt-1 font-medium" id="dashKpiOcupacion">0% Ocupación</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-pink-50 text-brand-500 flex items-center justify-center text-xl">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100/80 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Ingresos Estimados</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="dashKpiIngresos">$0</h3>
+                            <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-check"></i> Proyección Hoy</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100/80 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Total de clientas</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="dashKpiClientas">0</h3>
+                            <p class="text-xs text-pink-500 mt-1 font-medium">Registradas en sistema</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100/80 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Servicio Más solicitado</p>
+                            <h3 class="text-base font-bold text-gray-800 mt-1" id="dashKpiServicio">Uñas Manos</h3>
+                            <p class="text-xs text-gray-400 mt-1">Mayor frecuencia</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-pink-100 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-gray-800">Franja Laboral de Hoy (8:00 AM - 12:00 PM)</h3>
+                            <span class="text-xs bg-pink-50 text-brand-600 font-semibold px-3 py-1 rounded-full border border-pink-200">
+                                4 Bloques
+                            </span>
+                        </div>
+                        <div id="dashboardAgendaList" class="space-y-3">
+                 
+                        </div>
+                    </div>
+
+                   
+                    <div class="space-y-6">
+                        <div class="bg-white p-5 rounded-2xl border border-pink-100 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-brand-500"></i> Catálogo Rápido
+                            </h4>
+                            <div class="space-y-2.5 text-sm" id="dashboardQuickServices">
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+           
+            <section id="view-agenda" class="view-section hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">Agenda General de Citas</h3>
+                            <p class="text-xs text-gray-500">Gestión de turnos y estados de atención</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="filterFecha" onchange="renderAgendaView()" class="px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-500">
+                        </div>
+                    </div>
+
+            
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead class="bg-pink-50/60 text-gray-700 uppercase text-xs font-semibold">
+                                <tr>
+                                    <th class="p-3.5 rounded-l-xl">Horario</th>
+                                    <th class="p-3.5">Clienta</th>
+                                    <th class="p-3.5">Servicios</th>
+                                    <th class="p-3.5">Total</th>
+                                    <th class="p-3.5">Estado</th>
+                                    <th class="p-3.5 rounded-r-xl text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agendaTableBody" class="divide-y divide-gray-100">
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="view-clientas" class="view-section hidden space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg">Directorio de Clientas</h3>
+                        <p class="text-xs text-gray-500">Historial y datos de contacto</p>
+                    </div>
+                    <button onclick="openModalClienta()" class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm">
+                        + Nueva Clienta
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="clientasGrid">
+               
+                </div>
+            </section>
+
+    
+            <section id="view-servicios" class="view-section hidden space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg">Catálogo de Servicios</h3>
+                        <p class="text-xs text-gray-500">Administra los precios estándar de tu negocio</p>
+                    </div>
+                    <button onclick="openModalServicio()" class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm">
+                        + Nuevo Servicio
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="serviciosGrid">
+           
+                </div>
+            </section>
+
+         
+            <section id="view-reportes" class="view-section hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm space-y-6">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg">Reportes & Analítica</h3>
+                        <p class="text-xs text-gray-500">Consulta la actividad e ingresos estimados por periodo</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-end gap-3 p-4 bg-pink-50/60 rounded-xl border border-pink-100">
+                        <div class="flex-1">
+                            <label for="reportPeriodo" class="block text-xs font-bold text-gray-700 uppercase mb-1">Periodo</label>
+                            <select id="reportPeriodo" onchange="updateReportPeriod()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+                                <option value="dia">Por día</option>
+                                <option value="semana">Por semana</option>
+                                <option value="mes">Por mes</option>
+                                <option value="ano">Por año</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <label for="reportFecha" class="block text-xs font-bold text-gray-700 uppercase mb-1">Fecha de referencia</label>
+                            <input type="date" id="reportFecha" onchange="updateReportPeriod()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+                        </div>
+                        <p id="reportRango" class="flex-1 text-sm font-semibold text-brand-600 sm:text-right"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-xl border border-pink-100 bg-white">
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Citas no canceladas</p>
+                            <p id="reportTotalCitas" class="text-2xl font-bold text-gray-800 mt-1">0</p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-pink-100 bg-white">
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Ingresos estimados</p>
+                            <p id="reportIngresos" class="text-2xl font-bold text-brand-600 mt-1">$0</p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-pink-100 bg-white">
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Citas completadas</p>
+                            <p id="reportCitasCompletadas" class="text-2xl font-bold text-gray-800 mt-1">0</p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-pink-100 bg-white">
+                            <p class="text-xs font-semibold text-gray-400 uppercase">Clientas atendidas</p>
+                            <p id="reportClientas" class="text-2xl font-bold text-gray-800 mt-1">0</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <h4 class="font-bold text-sm text-gray-700 mb-4">Servicios Más Solicitados</h4>
+                            <div class="h-64 relative">
+                                <canvas id="chartServicios"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <h4 class="font-bold text-sm text-gray-700 mb-4">Ocupación de Franjas Horarias</h4>
+                            <div class="h-64 relative">
+                                <canvas id="chartHorarios"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+  
+    <div id="modalCita" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-pink-100 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="fa-regular fa-calendar-plus text-brand-500"></i> Agendar Cita
+                </h3>
+                <button onclick="closeModalCita()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="formCita" onsubmit="guardarCita(event)" class="mt-4 space-y-4">
+                
+               
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fecha de la Cita</label>
+                    <input type="date" id="citaFecha" required onchange="validarHorariosDisponibles()" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Franja Horaria Matutina</label>
+                    <select id="citaHora" required class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-500">
+                        <option value="">Seleccione una fecha primero...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Clienta</label>
+                        <button type="button" onclick="openModalClienta()" class="text-xs text-brand-600 font-semibold hover:underline">+ Crear Clienta</button>
+                    </div>
+                    <select id="citaClienta" required class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-500">
+                    
+                    </select>
+                </div>
+
+           
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Servicios Solicitados</label>
+                    <div id="citaServiciosContainer" class="space-y-2 bg-gray-50 p-3 rounded-xl border border-gray-200 max-h-40 overflow-y-auto">
+                
+                    </div>
+                </div>
+
+      
+                <div class="bg-pink-50 p-3.5 rounded-xl flex items-center justify-between border border-pink-200">
+                    <span class="text-xs font-bold text-gray-700 uppercase">Total Estimado:</span>
+                    <span id="citaTotalLabel" class="font-bold text-brand-600 text-lg">$0</span>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeModalCita()" class="w-1/2 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2.5 rounded-xl bg-brand-500 text-white text-sm font-medium shadow-md hover:bg-brand-600">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+  
+    <div id="modalClienta" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-pink-100">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 id="modalClientaTitulo" class="font-bold text-gray-800">Nueva Clienta</h3>
+                <button onclick="closeModalClienta()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="formClienta" onsubmit="guardarClienta(event)" class="mt-4 space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre Completo</label>
+                    <input type="text" id="clientaNombre" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Teléfono</label>
+                    <input type="tel" id="clientaTelefono" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Notas / Preferencias</label>
+                    <input type="text" id="clientaNotas" placeholder="Ej. Alérgica a acrílico" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModalClienta()" class="w-1/2 py-2 rounded-xl border text-sm">Cancelar</button>
+                    <button id="clientaSubmitButton" type="submit" class="w-1/2 py-2 rounded-xl bg-brand-500 text-white text-sm">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+  
+    <div id="modalServicio" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-pink-100">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 id="modalServicioTitulo" class="font-bold text-gray-800">Nuevo Servicio</h3>
+                <button onclick="closeModalServicio()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="formServicio" onsubmit="guardarServicio(event)" class="mt-4 space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre del Servicio</label>
+                    <input type="text" id="servicioNombre" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Precio Estándar ($)</label>
+                    <input type="number" id="servicioPrecio" required min="1000" step="1000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModalServicio()" class="w-1/2 py-2 rounded-xl border text-sm">Cancelar</button>
+                    <button id="servicioSubmitButton" type="submit" class="w-1/2 py-2 rounded-xl bg-brand-500 text-white text-sm">Guardar Servicio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+     
+        const FRANJAS_HORARIAS = [
+            "08:00 AM - 09:00 AM",
+            "09:00 AM - 10:00 AM",
+            "10:00 AM - 11:00 AM",
+            "11:00 AM - 12:00 PM"
+        ];
+
+      
+        const defaultClientas = [
+            { id: 1, nombre: "Laura Gómez", telefono: "301 555 0192", notas: "Prefiere tonos pastel" },
+            { id: 2, nombre: "Camila Torres", telefono: "312 444 8821", notas: "Cliente puntual" },
+            { id: 3, nombre: "Diana Pérez", telefono: "320 111 2233", notas: "Uñas acrílicas habituales" }
+        ];
+
+        const defaultServicios = [
+            { id: 1, nombre: "Uñas Manos", precio: 25000, icono: "fa-hand" },
+            { id: 2, nombre: "Uñas Pies", precio: 22000, icono: "fa-shoe-prints" },
+            { id: 3, nombre: "Cabello / Peinado", precio: 45000, icono: "fa-scissors" },
+            { id: 4, nombre: "Combo Completo", precio: 85000, icono: "fa-wand-magic-sparkles" }
+        ];
+
+
+        let clientas = JSON.parse(localStorage.getItem('glow_clientas')) || defaultClientas;
+        let servicios = JSON.parse(localStorage.getItem('glow_servicios')) || defaultServicios;
+        let citas = JSON.parse(localStorage.getItem('glow_citas')) || [];
+
+        let chartServiciosInstance = null;
+        let chartHorariosInstance = null;
+
+   
+        function fechaParaInput(fecha) {
+            const year = fecha.getFullYear();
+            const month = String(fecha.getMonth() + 1).padStart(2, '0');
+            const day = String(fecha.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        window.onload = function() {
+            
+            if (citas.length === 0) {
+                citas = [
+                    { id: 101, fecha: todayStr, hora: "08:00 AM - 09:00 AM", clientaId: 1, serviciosIds: [1], total: 25000, estado: "Completada" },
+                    { id: 102, fecha: todayStr, hora: "09:00 AM - 10:00 AM", clientaId: 2, serviciosIds: [3], total: 45000, estado: "Pendiente" }
+                ];
+                saveToLocalStorage();
+            }
+
+            setFechaActual();
+            document.getElementById('citaFecha').value = todayStr;
+            document.getElementById('filterFecha').value = todayStr;
+            document.getElementById('reportFecha').value = todayStr;
+
+            renderDashboard();
+            renderAgendaView();
+            renderClientas();
+            renderServicios();
+            initCharts();
+        };
+
+        function saveToLocalStorage() {
+            localStorage.setItem('glow_clientas', JSON.stringify(clientas));
+            localStorage.setItem('glow_servicios', JSON.stringify(servicios));
+            localStorage.setItem('glow_citas', JSON.stringify(citas));
+        }
+
+        function setFechaActual() {
+            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const hoy = new Date();
+            const fechaStr = hoy.toLocaleDateString('es-ES', opciones);
+            document.getElementById('currentDateText').innerText = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
+        }
+
+        
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.getAttribute('data-view') === viewName) {
+                    btn.classList.add('bg-pink-50', 'text-brand-600', 'font-semibold');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.remove('bg-pink-50', 'text-brand-600', 'font-semibold');
+                    btn.classList.add('text-gray-600');
+                }
+            });
+
+            const titles = {
+                dashboard: "Dashboard Principal",
+                agenda: "Agenda de Citas Matutinas",
+                clientas: "Directorio de Clientas",
+                servicios: "Catálogo de Servicios y Precios",
+                reportes: "Reportes Estadísticos"
+            };
+            document.getElementById('viewTitle').innerText = titles[viewName];
+
+            if(viewName === 'reportes') updateCharts();
+        }
+
+        function renderDashboard() {
+            const citasHoy = citas.filter(c => c.fecha === todayStr && c.estado !== 'Cancelada');
+            const totalIngresos = citasHoy.reduce((sum, c) => sum + c.total, 0);
+            const ocupacionPorcentaje = Math.round((citasHoy.length / FRANJAS_HORARIAS.length) * 100);
+
+            document.getElementById('dashKpiCitas').innerText = `${citasHoy.length} / ${FRANJAS_HORARIAS.length}`;
+            document.getElementById('dashKpiOcupacion').innerText = `${ocupacionPorcentaje}% Ocupación Agenda`;
+            document.getElementById('dashKpiIngresos').innerText = `$${totalIngresos.toLocaleString('es-CO')}`;
+            document.getElementById('dashKpiClientas').innerText = clientas.length;
+
+          
+            const container = document.getElementById('dashboardAgendaList');
+            container.innerHTML = '';
+
+            FRANJAS_HORARIAS.forEach(franja => {
+                const cita = citasHoy.find(c => c.hora === franja);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "flex items-center justify-between p-3.5 rounded-xl border border-gray-100 bg-gray-50/50";
+
+                if (cita) {
+                    const clientaObj = clientas.find(cl => cl.id === cita.clientaId) || { nombre: "Clienta" };
+                    const servNombres = cita.serviciosIds.map(sId => servicios.find(s => s.id === sId)?.nombre).join(', ');
+
+                    itemDiv.className = "flex items-center justify-between p-3.5 rounded-xl border border-pink-200 bg-pink-50/40";
+                    itemDiv.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-700 bg-white px-2.5 py-1 rounded-lg border border-pink-100">${franja}</span>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">${clientaObj.nombre}</p>
+                                <p class="text-xs text-brand-600 font-medium">${servNombres}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-gray-800">$${cita.total.toLocaleString('es-CO')}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                                cita.estado === 'Completada' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                            }">${cita.estado}</span>
+                        </div>
+                    `;
+                } else {
+                    itemDiv.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-400 bg-white px-2.5 py-1 rounded-lg border border-gray-200">${franja}</span>
+                            <span class="text-xs italic text-gray-400">Disponible para agendar</span>
+                        </div>
+                        <button onclick="agendarEnHora('${franja}')" class="text-xs text-brand-600 font-semibold hover:underline">+ Reservar</button>
+                    `;
+                }
+                container.appendChild(itemDiv);
+            });
+
+            
+            const quickContainer = document.getElementById('dashboardQuickServices');
+            quickContainer.innerHTML = '';
+            servicios.forEach(s => {
+                quickContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-gray-50">
+                        <span class="text-gray-700 font-medium">${escapeHtml(s.nombre)}</span>
+                        <span class="font-bold text-gray-900">$${s.precio.toLocaleString('es-CO')}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAgendaView() {
+            const fechaFiltro = document.getElementById('filterFecha').value || todayStr;
+            const tbody = document.getElementById('agendaTableBody');
+            tbody.innerHTML = '';
+
+            const citasFiltradas = citas.filter(c => c.fecha === fechaFiltro);
+
+            if (citasFiltradas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400 italic">No hay citas agendadas para esta fecha.</td></tr>`;
+                return;
+            }
+
+            citasFiltradas.forEach(cita => {
+                const clienta = clientas.find(c => c.id === cita.clientaId) || { nombre: "N/A" };
+                const servNombres = cita.serviciosIds.map(sId => servicios.find(s => s.id === sId)?.nombre).filter(Boolean).join(', ');
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-pink-50/20";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-gray-800">${cita.hora}</td>
+                    <td class="p-3.5 font-medium text-gray-800">${clienta.nombre}</td>
+                    <td class="p-3.5 text-xs text-gray-600">${servNombres}</td>
+                    <td class="p-3.5 font-bold text-gray-800">$${cita.total.toLocaleString('es-CO')}</td>
+                    <td class="p-3.5">
+                        <select onchange="cambiarEstadoCita(${cita.id}, this.value)" class="text-xs rounded-lg px-2 py-1 font-semibold border ${
+                            cita.estado === 'Completada' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            cita.estado === 'Cancelada' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-50 text-amber-700 border-amber-200'
+                        }">
+                            <option value="Pendiente" ${cita.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                            <option value="Completada" ${cita.estado === 'Completada' ? 'selected' : ''}>Completada</option>
+                            <option value="Cancelada" ${cita.estado === 'Cancelada' ? 'selected' : ''}>Cancelada</option>
+                        </select>
+                    </td>
+                    <td class="p-3.5 text-right">
+                        <button onclick="eliminarCita(${cita.id})" class="text-rose-500 hover:text-rose-700 text-xs font-semibold">
+                            <i class="fa-solid fa-trash-can"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function cambiarEstadoCita(id, nuevoEstado) {
+            const cita = citas.find(c => c.id === id);
+            if (cita) {
+                cita.estado = nuevoEstado;
+                saveToLocalStorage();
+                renderDashboard();
+                renderAgendaView();
+                showToast(`Estado actualizado a: ${nuevoEstado}`, 'success');
+            }
+        }
+
+        function eliminarCita(id) {
+            citas = citas.filter(c => c.id !== id);
+            saveToLocalStorage();
+            renderDashboard();
+            renderAgendaView();
+            showToast('Cita eliminada correctamente', 'info');
+        }
+
+        function openModalCita() {
+            populateClientaSelect();
+            populateServiciosCheckboxes();
+            validarHorariosDisponibles();
+            document.getElementById('modalCita').classList.remove('hidden');
+        }
+
+        function closeModalCita() {
+            document.getElementById('modalCita').classList.add('hidden');
+            document.getElementById('formCita').reset();
+            document.getElementById('citaTotalLabel').innerText = '$0';
+        }
+
+        function agendarEnHora(franja) {
+            openModalCita();
+            document.getElementById('citaHora').value = franja;
+        }
+
+        function populateClientaSelect() {
+            const select = document.getElementById('citaClienta');
+            select.innerHTML = '<option value="">Seleccione una clienta...</option>';
+            clientas.forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${escapeHtml(c.nombre)} (${escapeHtml(c.telefono)})</option>`;
+            });
+        }
+
+        function populateServiciosCheckboxes() {
+            const container = document.getElementById('citaServiciosContainer');
+            container.innerHTML = '';
+            servicios.forEach(s => {
+                container.innerHTML += `
+                    <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200 cursor-pointer hover:bg-pink-50/50">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" value="${s.id}" data-precio="${s.precio}" onchange="calcularTotalCitaModal()" class="servicio-checkbox accent-brand-500">
+                            <span class="text-xs font-medium text-gray-700">${escapeHtml(s.nombre)}</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-800">$${s.precio.toLocaleString('es-CO')}</span>
+                    </label>
+                `;
+            });
+        }
+
+        function calcularTotalCitaModal() {
+            const checkboxes = document.querySelectorAll('.servicio-checkbox:checked');
+            let total = 0;
+            checkboxes.forEach(cb => {
+                total += parseInt(cb.getAttribute('data-precio'));
+            });
+            document.getElementById('citaTotalLabel').innerText = `$${total.toLocaleString('es-CO')}`;
+            return total;
+        }
+
+        function validarHorariosDisponibles() {
+            const fecha = document.getElementById('citaFecha').value;
+            const selectHora = document.getElementById('citaHora');
+            selectHora.innerHTML = '<option value="">Seleccione una franja...</option>';
+
+            if (!fecha) return;
+
+            const citasOcupadas = citas.filter(c => c.fecha === fecha && c.estado !== 'Cancelada').map(c => c.hora);
+
+            FRANJAS_HORARIAS.forEach(franja => {
+                const ocupado = citasOcupadas.includes(franja);
+                selectHora.innerHTML += `
+                    <option value="${franja}" ${ocupado ? 'disabled class="bg-gray-100 text-gray-400"' : ''}>
+                        ${franja} ${ocupado ? '(OCUPADO)' : ''}
+                    </option>
+                `;
+            });
+        }
+
+        function guardarCita(e) {
+            e.preventDefault();
+            const fecha = document.getElementById('citaFecha').value;
+            const hora = document.getElementById('citaHora').value;
+            const clientaId = parseInt(document.getElementById('citaClienta').value);
+            
+            const selectedCheckboxes = document.querySelectorAll('.servicio-checkbox:checked');
+            const serviciosIds = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value));
+            const total = calcularTotalCitaModal();
+
+            if (serviciosIds.length === 0) {
+                showToast('Debe seleccionar al menos un servicio del catálogo', 'error');
+                return;
+            }
+
+           
+            const conflicto = citas.find(c => c.fecha === fecha && c.hora === hora && c.estado !== 'Cancelada');
+            if (conflicto) {
+                showToast('Ese horario ya fue reservado. Elija otra franja.', 'error');
+                return;
+            }
+
+            const nuevaCita = {
+                id: Date.now(),
+                fecha,
+                hora,
+                clientaId,
+                serviciosIds,
+                total,
+                estado: 'Pendiente'
+            };
+
+            citas.push(nuevaCita);
+            saveToLocalStorage();
+            renderDashboard();
+            renderAgendaView();
+            closeModalCita();
+            showToast('¡Cita agendada con éxito!', 'success');
+        }
+
+        function renderClientas() {
+            const grid = document.getElementById('clientasGrid');
+            grid.innerHTML = '';
+
+            if (clientas.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center py-8 text-sm text-gray-400 italic">Aún no hay clientas en el directorio.</p>';
+                return;
+            }
+
+            clientas.forEach(c => {
+                grid.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100 shadow-sm space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-pink-100 text-brand-600 font-bold flex items-center justify-center">
+                                ${escapeHtml(c.nombre.charAt(0))}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm">${escapeHtml(c.nombre)}</h4>
+                                <p class="text-xs text-gray-500"><i class="fa-solid fa-phone text-[10px]"></i> ${escapeHtml(c.telefono)}</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 bg-gray-50 p-2 rounded-lg italic">"${escapeHtml(c.notas || 'Sin notas adicionales')}"</p>
+                        <div class="flex justify-end gap-2 border-t border-gray-100 pt-2">
+                            <button type="button" onclick="editarClienta(${c.id})" aria-label="Editar ${escapeHtml(c.nombre)}" title="Editar clienta" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-brand-600 hover:bg-pink-50">
+                                <i class="fa-solid fa-pen-to-square"></i> Editar
+                            </button>
+                            <button type="button" onclick="eliminarClienta(${c.id})" aria-label="Eliminar ${escapeHtml(c.nombre)}" title="Eliminar clienta" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-500 hover:bg-rose-50">
+                                <i class="fa-solid fa-trash-can"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        let clientaEnEdicionId = null;
+
+        function openModalClienta() {
+            clientaEnEdicionId = null;
+            document.getElementById('formClienta').reset();
+            document.getElementById('modalClientaTitulo').innerText = 'Nueva Clienta';
+            document.getElementById('clientaSubmitButton').innerText = 'Guardar';
+            document.getElementById('modalClienta').classList.remove('hidden');
+        }
+
+        function editarClienta(id) {
+            const clienta = clientas.find(c => c.id === id);
+            if (!clienta) {
+                showToast('No se encontró la clienta que desea editar', 'error');
+                return;
+            }
+
+            clientaEnEdicionId = id;
+            document.getElementById('clientaNombre').value = clienta.nombre;
+            document.getElementById('clientaTelefono').value = clienta.telefono;
+            document.getElementById('clientaNotas').value = clienta.notas || '';
+            document.getElementById('modalClientaTitulo').innerText = 'Editar Clienta';
+            document.getElementById('clientaSubmitButton').innerText = 'Guardar Cambios';
+            document.getElementById('modalClienta').classList.remove('hidden');
+        }
+
+        function closeModalClienta() {
+            document.getElementById('modalClienta').classList.add('hidden');
+            document.getElementById('formClienta').reset();
+            clientaEnEdicionId = null;
+        }
+
+        function guardarClienta(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('clientaNombre').value.trim();
+            const telefono = document.getElementById('clientaTelefono').value.trim();
+            const notas = document.getElementById('clientaNotas').value.trim();
+            const estaEditando = clientaEnEdicionId !== null;
+
+            if (!nombre || !telefono) {
+                showToast('Ingrese el nombre y el teléfono de la clienta', 'error');
+                return;
+            }
+
+            if (clientaEnEdicionId !== null) {
+                const clienta = clientas.find(c => c.id === clientaEnEdicionId);
+                if (!clienta) {
+                    showToast('No se encontró la clienta que desea editar', 'error');
+                    closeModalClienta();
+                    return;
+                }
+                clienta.nombre = nombre;
+                clienta.telefono = telefono;
+                clienta.notas = notas;
+            } else {
+                clientas.push({ id: Date.now(), nombre, telefono, notas });
+            }
+            saveToLocalStorage();
+            renderClientas();
+            populateClientaSelect();
+            renderDashboard();
+            renderAgendaView();
+            closeModalClienta();
+            showToast(estaEditando ? 'Datos de la clienta actualizados' : 'Clienta agregada al directorio', 'success');
+        }
+
+        function eliminarClienta(id) {
+            const clienta = clientas.find(c => c.id === id);
+            if (!clienta) {
+                showToast('No se encontró la clienta que desea eliminar', 'error');
+                return;
+            }
+
+            if (citas.some(cita => cita.clientaId === id)) {
+                showToast('No se puede eliminar: la clienta está asociada a una cita guardada', 'error');
+                return;
+            }
+
+            if (!window.confirm(`¿Está segura de que desea eliminar a "${clienta.nombre}" del directorio?`)) return;
+
+            clientas = clientas.filter(c => c.id !== id);
+            saveToLocalStorage();
+            renderClientas();
+            populateClientaSelect();
+            renderDashboard();
+            renderAgendaView();
+            showToast('Clienta eliminada del directorio', 'info');
+        }
+
+        function renderServicios() {
+            const grid = document.getElementById('serviciosGrid');
+            grid.innerHTML = '';
+
+            if (servicios.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center py-8 text-sm text-gray-400 italic">Aún no hay servicios en el catálogo.</p>';
+                return;
+            }
+
+            servicios.forEach(s => {
+                grid.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100 shadow-sm flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">${escapeHtml(s.nombre)}</h4>
+                            <p class="text-lg font-bold text-brand-600 mt-1">$${s.precio.toLocaleString('es-CO')}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="editarServicio(${s.id})" aria-label="Editar ${escapeHtml(s.nombre)}" title="Editar servicio" class="w-9 h-9 rounded-lg text-brand-600 hover:bg-pink-50">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" onclick="eliminarServicio(${s.id})" aria-label="Eliminar ${escapeHtml(s.nombre)}" title="Eliminar servicio" class="w-9 h-9 rounded-lg text-rose-500 hover:bg-rose-50">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                            <div class="w-10 h-10 rounded-xl bg-pink-50 text-brand-500 flex items-center justify-center">
+                                <i class="fa-solid ${s.icono || 'fa-spa'} text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        let servicioEnEdicionId = null;
+
+        function openModalServicio() {
+            servicioEnEdicionId = null;
+            document.getElementById('formServicio').reset();
+            document.getElementById('modalServicioTitulo').innerText = 'Nuevo Servicio';
+            document.getElementById('servicioSubmitButton').innerText = 'Guardar Servicio';
+            document.getElementById('modalServicio').classList.remove('hidden');
+        }
+
+        function editarServicio(id) {
+            const servicio = servicios.find(s => s.id === id);
+            if (!servicio) {
+                showToast('No se encontró el servicio que desea editar', 'error');
+                return;
+            }
+
+            servicioEnEdicionId = id;
+            document.getElementById('servicioNombre').value = servicio.nombre;
+            document.getElementById('servicioPrecio').value = servicio.precio;
+            document.getElementById('modalServicioTitulo').innerText = 'Editar Servicio';
+            document.getElementById('servicioSubmitButton').innerText = 'Guardar Cambios';
+            document.getElementById('modalServicio').classList.remove('hidden');
+        }
+
+        function closeModalServicio() {
+            document.getElementById('modalServicio').classList.add('hidden');
+            document.getElementById('formServicio').reset();
+            servicioEnEdicionId = null;
+        }
+
+        function guardarServicio(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('servicioNombre').value.trim();
+            const precio = Number(document.getElementById('servicioPrecio').value);
+            const estaEditando = servicioEnEdicionId !== null;
+            if (!nombre || !Number.isFinite(precio) || precio < 1000) {
+                showToast('Ingrese un nombre y un precio válido para el servicio', 'error');
+                return;
+            }
+
+            if (servicioEnEdicionId !== null) {
+                const servicio = servicios.find(s => s.id === servicioEnEdicionId);
+                if (!servicio) {
+                    showToast('No se encontró el servicio que desea editar', 'error');
+                    closeModalServicio();
+                    return;
+                }
+                servicio.nombre = nombre;
+                servicio.precio = precio;
+            } else {
+                servicios.push({ id: Date.now(), nombre, precio, icono: 'fa-wand-magic-sparkles' });
+            }
+            saveToLocalStorage();
+            renderServicios();
+            renderDashboard();
+            updateCharts();
+            closeModalServicio();
+            showToast(estaEditando ? 'Servicio actualizado correctamente' : 'Servicio agregado al catálogo', 'success');
+        }
+
+        function eliminarServicio(id) {
+            const servicio = servicios.find(s => s.id === id);
+            if (!servicio) {
+                showToast('No se encontró el servicio que desea eliminar', 'error');
+                return;
+            }
+
+            if (citas.some(cita => Array.isArray(cita.serviciosIds) && cita.serviciosIds.includes(id))) {
+                showToast('No se puede eliminar: el servicio está asociado a una cita guardada', 'error');
+                return;
+            }
+
+            if (!window.confirm(`¿Está segura de que desea eliminar "${servicio.nombre}" del catálogo?`)) return;
+
+            servicios = servicios.filter(s => s.id !== id);
+            saveToLocalStorage();
+            renderServicios();
+            renderDashboard();
+            updateCharts();
+            showToast('Servicio eliminado del catálogo', 'info');
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        function initCharts() {
+            const ctxServicios = document.getElementById('chartServicios').getContext('2d');
+            chartServiciosInstance = new Chart(ctxServicios, {
+                type: 'doughnut',
+                data: { labels: [], datasets: [{ data: [], backgroundColor: ['#db2777', '#f472b6', '#fb7185', '#c084fc'] }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            const ctxHorarios = document.getElementById('chartHorarios').getContext('2d');
+            chartHorariosInstance = new Chart(ctxHorarios, {
+                type: 'bar',
+                data: { labels: FRANJAS_HORARIAS, datasets: [{ label: 'Citas Solicitadas', data: [0, 0, 0, 0], backgroundColor: '#be185d' }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            updateCharts();
+        }
+
+        function updateCharts() {
+            const rango = obtenerRangoReporte();
+            const citasPeriodo = citas.filter(cita => cita.fecha >= rango.inicio && cita.fecha <= rango.fin);
+            const citasActivas = citasPeriodo.filter(cita => cita.estado !== 'Cancelada');
+            const citasCompletadas = citasActivas.filter(cita => cita.estado === 'Completada');
+            const clientasAtendidas = new Set(citasCompletadas.map(cita => cita.clientaId));
+            const ingresosEstimados = citasActivas.reduce((total, cita) => total + (Number(cita.total) || 0), 0);
+
+            document.getElementById('reportRango').innerText = rango.etiqueta;
+            document.getElementById('reportTotalCitas').innerText = citasActivas.length;
+            document.getElementById('reportIngresos').innerText = `$${ingresosEstimados.toLocaleString('es-CO')}`;
+            document.getElementById('reportCitasCompletadas').innerText = citasCompletadas.length;
+            document.getElementById('reportClientas').innerText = clientasAtendidas.size;
+
+            if (!chartServiciosInstance || !chartHorariosInstance) return;
+
+            const conteoServicios = {};
+            citasActivas.forEach(cita => {
+                (Array.isArray(cita.serviciosIds) ? cita.serviciosIds : []).forEach(sId => {
+                    const s = servicios.find(serv => serv.id === sId);
+                    if (s) conteoServicios[s.nombre] = (conteoServicios[s.nombre] || 0) + 1;
+                });
+            });
+
+            chartServiciosInstance.data.labels = Object.keys(conteoServicios);
+            chartServiciosInstance.data.datasets[0].data = Object.values(conteoServicios);
+            chartServiciosInstance.update();
+
+            const conteoHorarios = FRANJAS_HORARIAS.map(franja =>
+                citasActivas.filter(cita => cita.hora === franja).length
+            );
+            chartHorariosInstance.data.datasets[0].data = conteoHorarios;
+            chartHorariosInstance.update();
+        }
+
+        function updateReportPeriod() {
+            updateCharts();
+        }
+
+        function obtenerRangoReporte() {
+            const periodo = document.getElementById('reportPeriodo').value;
+            const fechaReferencia = document.getElementById('reportFecha').value || todayStr;
+            const [year, month, day] = fechaReferencia.split('-').map(Number);
+            let inicio = new Date(year, month - 1, day);
+            let fin = new Date(year, month - 1, day);
+            const opcionesFecha = { day: 'numeric', month: 'short', year: 'numeric' };
+            let etiqueta;
+
+            if (periodo === 'semana') {
+                const diferenciaDesdeLunes = (inicio.getDay() + 6) % 7;
+                inicio.setDate(inicio.getDate() - diferenciaDesdeLunes);
+                fin = new Date(inicio);
+                fin.setDate(fin.getDate() + 6);
+                etiqueta = `${inicio.toLocaleDateString('es-CO', opcionesFecha)} - ${fin.toLocaleDateString('es-CO', opcionesFecha)}`;
+            } else if (periodo === 'mes') {
+                inicio = new Date(year, month - 1, 1);
+                fin = new Date(year, month, 0);
+                etiqueta = inicio.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+            } else if (periodo === 'ano') {
+                inicio = new Date(year, 0, 1);
+                fin = new Date(year, 11, 31);
+                etiqueta = String(year);
+            } else {
+                etiqueta = inicio.toLocaleDateString('es-CO', opcionesFecha);
+            }
+
+            return {
+                inicio: fechaParaInput(inicio),
+                fin: fechaParaInput(fin),
+                etiqueta
+            };
+        }
+
+    
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = msg;
+
+            toast.className = `p-4 mb-4 text-sm rounded-xl transition-all shadow-md flex items-center justify-between text-white ${
+                type === 'error' ? 'bg-rose-500' : type === 'success' ? 'bg-emerald-600' : 'bg-brand-500'
+            }`;
+
+            toast.classList.remove('hidden');
+            setTimeout(() => { hideToast(); }, 3500);
+        }
+
+        function hideToast() { document.getElementById('toastNotification').classList.add('hidden'); }
+    </script>
+</body>
+</html>
